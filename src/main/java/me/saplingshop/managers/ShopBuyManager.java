@@ -17,7 +17,7 @@ public class ShopBuyManager {
 
     public static final String BUY_TITLE_ORES     = "§9§l⚒ Магазин — Руды";
     public static final String BUY_TITLE_ENCHANTS = "§5§l✦ Магазин — Зачарования";
-    public static final String BUY_TITLE_DECO     = "§6§l✦ Магазин — Украшения";
+    public static final String BUY_TITLE_DECO     = "§6§l✦ Магазин — Отделки брони";
 
     // ─── Записи каталога ──────────────────────────────────────────
 
@@ -47,20 +47,28 @@ public class ShopBuyManager {
             new ShopEntry(Material.EMERALD_ORE,       "§aИзумрудная руда",     8,  1,  List.of("§7x1 изумрудная руда"))
     );
 
-    // ─── Украшения / наковальня ───────────────────────────────────
+    // ─── Отделки брони (armor trim smithing templates) ────────────
+    // Покупаешь шаблон → сам куёшь его в кузнице с бронёй и материалом
 
     private static final List<ShopEntry> DECO = List.of(
-            new ShopEntry(Material.ANVIL,                  "§8Наковальня",                 20, 1, List.of("§7Используется для зачарований и ремонта")),
-            new ShopEntry(Material.CHIPPED_ANVIL,          "§8Треснутая наковальня",        12, 1, List.of("§7Слегка повреждённая")),
-            new ShopEntry(Material.DAMAGED_ANVIL,          "§8Сильно повреждённая наков.",   7, 1, List.of("§7Почти сломана")),
-            new ShopEntry(Material.GOLDEN_HELMET,          "§6Золотой шлем",                 8, 1, List.of("§7Украшение для головы")),
-            new ShopEntry(Material.GOLDEN_CHESTPLATE,      "§6Золотой нагрудник",           12, 1, List.of("§7Украшение торса")),
-            new ShopEntry(Material.GOLDEN_LEGGINGS,        "§6Золотые поножи",              10, 1, List.of("§7Украшение ног")),
-            new ShopEntry(Material.GOLDEN_BOOTS,           "§6Золотые сапоги",               6, 1, List.of("§7Украшение для ног")),
-            new ShopEntry(Material.GOLDEN_APPLE,           "§6Золотое яблоко",              15, 1, List.of("§7Восстанавливает здоровье")),
-            new ShopEntry(Material.ENCHANTED_GOLDEN_APPLE, "§6§lЗаворожённое яблоко",       80, 1, List.of("§7Даёт мощные эффекты")),
-            new ShopEntry(Material.GOLD_NUGGET,            "§6Самородок золота",             1, 4, List.of("§7x4 самородка")),
-            new ShopEntry(Material.GOLD_BLOCK,             "§6Золотой блок",                25, 1, List.of("§7Декоративный блок"))
+            new ShopEntry(Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE,    "§7Отделка: Часовой",     15, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.VEX_ARMOR_TRIM_SMITHING_TEMPLATE,       "§7Отделка: Векс",        15, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Дикая",       12, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE,     "§7Отделка: Побережье",   12, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Дюна",        12, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, "§7Отделка: Путеводная",  15, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE,    "§7Отделка: Хранитель",   18, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE,    "§7Отделка: Творец",      18, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.HOST_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Хозяин",      18, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.WARD_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Страж",       20, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE,   "§7Отделка: Тишина",      40, 1, List.of("§7Редчайший шаблон!", "§7Куётся в кузнице")),
+            new ShopEntry(Material.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Прилив",      20, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE,     "§7Отделка: Рыло",        15, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.RIB_ARMOR_TRIM_SMITHING_TEMPLATE,       "§7Отделка: Ребро",       15, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.EYE_ARMOR_TRIM_SMITHING_TEMPLATE,       "§7Отделка: Око",         20, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE,     "§7Отделка: Шпиль",       20, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Поток",       25, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице")),
+            new ShopEntry(Material.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE,      "§7Отделка: Молния",      25, 1, List.of("§7Шаблон отделки брони", "§7Куётся в кузнице"))
     );
 
     // ─── Зачарования ──────────────────────────────────────────────
@@ -174,7 +182,7 @@ public class ShopBuyManager {
         inv.setItem(45, GuiUtil.makeItem(Material.BARRIER, "§c§lЗакрыть", List.of("§7Закрыть магазин")));
         inv.setItem(47, GuiUtil.makeItem(Material.COAL,          "§7§l⚒ Руды",        List.of(current.equals("ores")     ? "§a▶ Текущий раздел" : "§eПерейти")));
         inv.setItem(48, GuiUtil.makeItem(Material.ENCHANTED_BOOK,"§5§l✦ Зачарования", List.of(current.equals("enchants") ? "§a▶ Текущий раздел" : "§eПерейти")));
-        inv.setItem(50, GuiUtil.makeItem(Material.GOLD_INGOT,    "§6§l✦ Украшения",   List.of(current.equals("deco")     ? "§a▶ Текущий раздел" : "§eПерейти")));
+        inv.setItem(50, GuiUtil.makeItem(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, "§6§l✦ Отделки брони", List.of(current.equals("deco") ? "§a▶ Текущий раздел" : "§eПерейти")));
         inv.setItem(53, GuiUtil.makeItem(Material.NETHER_STAR,
                 "§e§lБаланс: §6" + plugin.getCoinManager().getBalance(player) + " монет", List.of("§7Ваши монеты")));
     }
