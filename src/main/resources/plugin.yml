@@ -3,7 +3,7 @@ version: 1.0.0
 main: me.saplingshop.SaplingShop
 api-version: 1.21
 author: SaplingShop
-description: Продавай саженцы за монеты (Nether Star), покупай руды, зачарования и украшения.
+description: Продавай саженцы за монеты (Nether Star), покупай руды, зачарования, отделки брони и генераторы.
 
 commands:
   shopsell:
@@ -12,9 +12,14 @@ commands:
     permission: saplingshop.sell
 
   shopbuy:
-    description: Открыть магазин покупки (руды, зачарования, украшения)
+    description: Открыть магазин покупки (руды, зачарования, отделки брони)
     usage: /shopbuy
     permission: saplingshop.buy
+
+  shopgen:
+    description: Открыть магазин генераторов руд
+    usage: /shopgen
+    permission: saplingshop.gen
 
 permissions:
   saplingshop.sell:
@@ -22,6 +27,9 @@ permissions:
     default: true
   saplingshop.buy:
     description: Доступ к /shopbuy
+    default: true
+  saplingshop.gen:
+    description: Доступ к /shopgen
     default: true
   saplingshop.admin:
     description: Права администратора
