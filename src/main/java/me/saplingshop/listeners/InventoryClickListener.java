@@ -33,12 +33,11 @@ public class InventoryClickListener implements Listener {
         // ── МАГАЗИН ПРОДАЖИ ──────────────────────────────────────
         if (title.equals(ShopSellManager.SELL_TITLE)) {
 
-            // Разрешаем класть предметы в слоты продажи
             boolean isSellSlot = false;
             for (int s : ShopSellManager.SELL_SLOTS) {
                 if (s == slot) { isSellSlot = true; break; }
             }
-            if (isSellSlot) return; // не отменяем — игрок кладёт саженцы
+            if (isSellSlot) return;
 
             event.setCancelled(true);
             if (clicked == null || clicked.getType() == Material.AIR) return;
@@ -95,7 +94,7 @@ public class InventoryClickListener implements Listener {
             return;
         }
 
-        // ── МАГАЗИН ПОКУПКИ — УКРАШЕНИЯ ───────────────────────────
+        // ── МАГАЗИН ПОКУПКИ — ОТДЕЛКИ БРОНИ ───────────────────────
         if (ShopBuyManager.isDecoShop(title)) {
             event.setCancelled(true);
             if (clicked == null || clicked.getType() == Material.AIR) return;
@@ -105,6 +104,16 @@ public class InventoryClickListener implements Listener {
             if (slot == 50) { plugin.getShopBuyManager().openDecoShop(player); return; }
             if (plugin.getShopBuyManager().handleDecoPurchase(player, clicked))
                 plugin.getShopBuyManager().openDecoShop(player);
+            return;
+        }
+
+        // ── МАГАЗИН ГЕНЕРАТОРОВ ───────────────────────────────────
+        if (plugin.getGeneratorManager().isGenShop(title)) {
+            event.setCancelled(true);
+            if (clicked == null || clicked.getType() == Material.AIR) return;
+            if (slot == 45) { player.closeInventory(); return; }
+            if (plugin.getGeneratorManager().handlePurchase(player, clicked))
+                plugin.getGeneratorManager().openShop(player);
         }
     }
 
@@ -115,7 +124,8 @@ public class InventoryClickListener implements Listener {
         if (title.equals(ShopSellManager.SELL_TITLE)
                 || ShopBuyManager.isOresShop(title)
                 || ShopBuyManager.isEnchantsShop(title)
-                || ShopBuyManager.isDecoShop(title)) {
+                || ShopBuyManager.isDecoShop(title)
+                || plugin.getGeneratorManager().isGenShop(title)) {
             plugin.getCoinManager().saveData();
         }
     }
