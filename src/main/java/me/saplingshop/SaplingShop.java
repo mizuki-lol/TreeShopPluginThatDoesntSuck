@@ -16,7 +16,6 @@ public class SaplingShop extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
 
         this.coinManager    = new CoinManager(this);
         this.shopSellManager = new ShopSellManager(this);
