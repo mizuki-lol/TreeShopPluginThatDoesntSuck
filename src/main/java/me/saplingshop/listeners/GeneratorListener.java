@@ -13,33 +13,32 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * Handles the lifecycle of generator blocks:
- * - When a tagged generator item is placed, the block's location is remembered.
- * - When that block is broken, the normal drop happens (handled by vanilla),
- *   but we cancel vanilla block removal logic ourselves is NOT needed —
- *   instead we let the block break normally and immediately set the same
- *   block back at that location (instant regeneration), without consuming
- *   another item, and we re-mark that location as a generator.
- *
- * To avoid abuse (silk touch / fortune farming many generators from one),
- * generator blocks always drop exactly one vanilla-style item via natural
- * drop suppression and a manual single drop, ignoring enchantments.
+ * Логика генераторов:
+ * - Игрок ставит блок-генератор (отмечен PersistentDataContainer тегом).
+ * - При ломке: блок полностью удаляется (становится воздухом), падает
+ *   обычный ресурс (без бонусов от зачарований), а через 1 секунду (20 тиков)
+ *   на этом же месте снова появляется блок-генератор того же типа.
  */
 public class GeneratorListener implements Listener {
+
+    private static final long RESPAWN_DELAY_TICKS = 20L; // 1 секунда
 
     private final SaplingShop plugin;
     private final NamespacedKey genKey;
 
-    // Tracks all currently active generator block locations (world;x;y;z -> material name)
+    // Координаты всех активных точек-генераторов -> материал блока
     private final Set<String> generatorLocations = new HashSet<>();
-    private final java.util.Map<String, String> locationMaterial = new java.util.HashMap<>();
+    private final Map<String, String> locationMaterial = new HashMap<>();
 
     private final File dataFile;
 
@@ -74,38 +73,48 @@ public class GeneratorListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        String locKey = locKey(block.getLocation());
+        Location loc = block.getLocation();
+        String locKey = locKey(loc);
 
-        if (!generatorLocations.contains(locKey)) return; // обычный блок — ничего не делаем
+        if (!generatorLocations.contains(locKey)) return; // обычный блок — не наш генератор
 
-        Player player = event.getPlayer();
         String matName = locationMaterial.get(locKey);
         Material material;
         try {
             material = Material.valueOf(matName);
         } catch (Exception e) {
-            // На случай повреждённых данных — снимаем тег и пропускаем как обычный блок
+            // повреждённые данные — снимаем метку и пропускаем как обычный блок
             generatorLocations.remove(locKey);
             locationMaterial.remove(locKey);
             return;
         }
 
-        // Отменяем вид дефолтного дропа (чтобы избежать дюпа через Fortune/Silk Touch
-        // и чтобы самим контролировать количество и вид выпавшего ресурса)
+        // Отменяем стандартный дроп (чтобы не зависело от Fortune/Silk Touch)
         event.setDropItems(false);
 
-        // Выдаём один стандартный ресурс соответствующий типу блока (как настоящая руда)
+        // Блок полностью удаляется — становится воздухом
+        block.setType(Material.AIR);
+
+        // Выдаём ресурс соответствующий типу блока
         ItemStack drop = getNaturalDrop(material);
-        block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), drop);
+        block.getWorld().dropItemNaturally(loc.clone().add(0.5, 0.5, 0.5), drop);
 
-        // Мгновенно восстанавливаем генератор на этом же месте
-        block.setType(material);
-
-        // Локация остаётся помеченной как генератор (на случай если plugin reload)
-        // Ничего больше менять не нужно — генератор уже отмечен в generatorLocations
+        // Планируем восстановление блока через 1 секунду на этом же месте
+        final Material finalMaterial = material;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Восстанавливаем только если место всё ещё воздух (на случай если игрок
+                // успел поставить туда что-то своё за эту секунду)
+                if (block.getType() == Material.AIR) {
+                    block.setType(finalMaterial);
+                }
+                // Локация остаётся помеченной как генератор для следующей ломки
+            }
+        }.runTaskLater(plugin, RESPAWN_DELAY_TICKS);
     }
 
-    /** Возвращает "природный" дроп для блока-генератора (без анчантов, по аналогии с настоящей рудой) */
+    /** Возвращает "природный" дроп для блока-генератора (без анчантов, аналогично настоящей руде) */
     private ItemStack getNaturalDrop(Material oreBlock) {
         return switch (oreBlock) {
             case STONE                -> new ItemStack(Material.STONE, 1);
