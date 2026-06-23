@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GeneratorManager {
 
-    public static final String GEN_TITLE = "§c§l⚙ Магазин — Генераторы руд";
+    public static final String GEN_TITLE = "§c§l⚙ Магазин — Генераторы";
 
     // PDC key used to mark an item/block as a generator and which ore it produces
     private NamespacedKey genKey;
@@ -45,7 +45,8 @@ public class GeneratorManager {
                 new GenEntry(Material.REDSTONE_ORE,"§cГенератор редстоуна",  70,  List.of("§7Ломаешь — падает редстоун", "§7На месте появляется новый блок")),
                 new GenEntry(Material.NETHER_QUARTZ_ORE, "§fГенератор кварца", 60, List.of("§7Ломаешь — падает кварц", "§7На месте появляется новый блок")),
                 new GenEntry(Material.EMERALD_ORE, "§aГенератор изумруда",   150, List.of("§7Ломаешь — падает изумруд", "§7На месте появляется новый блок")),
-                new GenEntry(Material.DIAMOND_ORE, "§bГенератор алмаза",    250, List.of("§7Ломаешь — падает алмаз", "§7На месте появляется новый блок"))
+                new GenEntry(Material.DIAMOND_ORE, "§bГенератор алмаза",    250, List.of("§7Ломаешь — падает алмаз", "§7На месте появляется новый блок")),
+                new GenEntry(Material.OAK_LEAVES,  "§2Генератор листвы",     35,  List.of("§730% шанс получить саженец", "§7На месте появляется новый блок"))
         );
     }
 
