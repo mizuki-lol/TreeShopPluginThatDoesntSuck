@@ -95,9 +95,18 @@ public class GeneratorListener implements Listener {
         // Блок полностью удаляется — становится воздухом
         block.setType(Material.AIR);
 
-        // Выдаём ресурс соответствующий типу блока
-        ItemStack drop = getNaturalDrop(material);
-        block.getWorld().dropItemNaturally(loc.clone().add(0.5, 0.5, 0.5), drop);
+        // Особая логика для генератора листвы: шанс 5% на случайный саженец,
+        // иначе дроп вообще без предмета (как настоящая листва)
+        if (material == Material.OAK_LEAVES) {
+            if (java.util.concurrent.ThreadLocalRandom.current().nextInt(100) < 30) {
+                ItemStack sapling = new ItemStack(randomSapling());
+                block.getWorld().dropItemNaturally(loc.clone().add(0.5, 0.5, 0.5), sapling);
+            }
+        } else {
+            // Обычные генераторы руд — выдаём ресурс соответствующий типу блока
+            ItemStack drop = getNaturalDrop(material);
+            block.getWorld().dropItemNaturally(loc.clone().add(0.5, 0.5, 0.5), drop);
+        }
 
         // Планируем восстановление блока через 1 секунду на этом же месте
         final Material finalMaterial = material;
@@ -112,6 +121,20 @@ public class GeneratorListener implements Listener {
                 // Локация остаётся помеченной как генератор для следующей ломки
             }
         }.runTaskLater(plugin, RESPAWN_DELAY_TICKS);
+    }
+
+    /** Возвращает случайный вид саженца (для генератора листвы) */
+    private Material randomSapling() {
+        Material[] saplings = {
+                Material.OAK_SAPLING,
+                Material.SPRUCE_SAPLING,
+                Material.BIRCH_SAPLING,
+                Material.JUNGLE_SAPLING,
+                Material.ACACIA_SAPLING,
+                Material.DARK_OAK_SAPLING,
+                Material.CHERRY_SAPLING
+        };
+        return saplings[java.util.concurrent.ThreadLocalRandom.current().nextInt(saplings.length)];
     }
 
     /** Возвращает "природный" дроп для блока-генератора (без анчантов, аналогично настоящей руде) */
